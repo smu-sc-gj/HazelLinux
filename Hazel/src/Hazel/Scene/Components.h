@@ -167,13 +167,8 @@ namespace Hazel {
 
 	using AllComponents = 
 		ComponentGroup<TransformComponent, SpriteRendererComponent,
-<<<<<<< HEAD
-			CircleRendererComponent, CameraComponent, NativeScriptComponent,
-			Rigidbody2DComponent, BoxCollider2DComponent, CircleCollider2DComponent>;
-=======
 			CircleRendererComponent, CameraComponent, ScriptComponent,
 			NativeScriptComponent, Rigidbody2DComponent, BoxCollider2DComponent,
 			CircleCollider2DComponent>;
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 
 }

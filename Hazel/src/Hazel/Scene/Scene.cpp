@@ -134,9 +134,6 @@ namespace Hazel {
 
 	void Scene::OnRuntimeStart()
 	{
-<<<<<<< HEAD
-		OnPhysics2DStart();
-=======
 		m_IsRunning = true;
 
 		OnPhysics2DStart();
@@ -153,20 +150,15 @@ namespace Hazel {
 				ScriptEngine::OnCreateEntity(entity);
 			}
 		}
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 	}
 
 	void Scene::OnRuntimeStop()
 	{
-<<<<<<< HEAD
-		OnPhysics2DStop();
-=======
 		m_IsRunning = false;
 
 		OnPhysics2DStop();
 
 		ScriptEngine::OnRuntimeStop();
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 	}
 
 	void Scene::OnSimulationStart()
@@ -304,27 +296,6 @@ namespace Hazel {
 
 	void Scene::OnUpdateSimulation(Timestep ts, EditorCamera& camera)
 	{
-<<<<<<< HEAD
-		// Physics
-		{
-			const int32_t velocityIterations = 6;
-			const int32_t positionIterations = 2;
-			m_PhysicsWorld->Step(ts, velocityIterations, positionIterations);
-
-			// Retrieve transform from Box2D
-			auto view = m_Registry.view<Rigidbody2DComponent>();
-			for (auto e : view)
-			{
-				Entity entity = { e, this };
-				auto& transform = entity.GetComponent<TransformComponent>();
-				auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
-
-				b2Body* body = (b2Body*)rb2d.RuntimeBody;
-				const auto& position = body->GetPosition();
-				transform.Translation.x = position.x;
-				transform.Translation.y = position.y;
-				transform.Rotation.z = body->GetAngle();
-=======
 		if (!m_IsPaused || m_StepFrames-- > 0)
 		{
 			// Physics
@@ -347,7 +318,6 @@ namespace Hazel {
 					transform.Translation.y = position.y;
 					transform.Rotation.z = body->GetAngle();
 				}
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 			}
 		}
 
@@ -391,12 +361,6 @@ namespace Hazel {
 		return {};
 	}
 
-<<<<<<< HEAD
-	void Scene::DuplicateEntity(Entity entity)
-	{
-		Entity newEntity = CreateEntity(entity.GetName());
-		CopyComponentIfExists(AllComponents{}, newEntity, entity);
-=======
 	void Scene::Step(int frames)
 	{
 		m_StepFrames = frames;
@@ -430,7 +394,6 @@ namespace Hazel {
 			return { m_EntityMap.at(uuid), this };
 
 		return {};
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 	}
 
 	void Scene::OnPhysics2DStart()
@@ -445,11 +408,7 @@ namespace Hazel {
 			auto& rb2d = entity.GetComponent<Rigidbody2DComponent>();
 
 			b2BodyDef bodyDef;
-<<<<<<< HEAD
-			bodyDef.type = Rigidbody2DTypeToBox2DBody(rb2d.Type);
-=======
 			bodyDef.type = Utils::Rigidbody2DTypeToBox2DBody(rb2d.Type);
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 			bodyDef.position.Set(transform.Translation.x, transform.Translation.y);
 			bodyDef.angle = transform.Rotation.z;
 

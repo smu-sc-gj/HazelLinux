@@ -42,7 +42,8 @@ namespace Hazel {
 	{
 		HZ_PROFILE_FUNCTION();
 
-		ScriptEngine::Shutdown();
+		// Removed this - but I can't see it started anywhere?
+		//ScriptEngine::Shutdown();
 		Renderer::Shutdown();
 	}
 
