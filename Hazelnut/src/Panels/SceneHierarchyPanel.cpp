@@ -1,11 +1,8 @@
 #include "SceneHierarchyPanel.h"
 #include "Hazel/Scene/Components.h"
-<<<<<<< HEAD
-=======
 
 #include "Hazel/Scripting/ScriptEngine.h"
 #include "Hazel/UI/UI.h"
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 
 #include <imgui/imgui.h>
 #include <imgui/imgui_internal.h>
@@ -228,7 +225,11 @@ namespace Hazel {
 
 			char buffer[256];
 			memset(buffer, 0, sizeof(buffer));
+#ifndef HZ_PLATFORM_LINUX
 			strncpy_s(buffer, sizeof(buffer), tag.c_str(), sizeof(buffer));
+#else
+			strncpy(buffer, tag.c_str(), sizeof(buffer));
+#endif
 			if (ImGui::InputText("##Tag", buffer, sizeof(buffer)))
 			{
 				tag = std::string(buffer);
@@ -244,10 +245,7 @@ namespace Hazel {
 		if (ImGui::BeginPopup("AddComponent"))
 		{
 			DisplayAddComponentEntry<CameraComponent>("Camera");
-<<<<<<< HEAD
-=======
 			DisplayAddComponentEntry<ScriptComponent>("Script");
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 			DisplayAddComponentEntry<SpriteRendererComponent>("Sprite Renderer");
 			DisplayAddComponentEntry<CircleRendererComponent>("Circle Renderer");
 			DisplayAddComponentEntry<Rigidbody2DComponent>("Rigidbody 2D");
@@ -332,7 +330,12 @@ namespace Hazel {
 			bool scriptClassExists = ScriptEngine::EntityClassExists(component.ClassName);
 
 			static char buffer[64];
+
+#ifndef HZ_PLATFORM_LINUX			
 			strcpy_s(buffer, sizeof(buffer), component.ClassName.c_str());
+#else
+			strcpy(buffer,component.ClassName.c_str());
+#endif
 
 			UI::ScopedStyleColor textColor(ImGuiCol_Text, ImVec4(0.9f, 0.2f, 0.3f, 1.0f), !scriptClassExists);
 

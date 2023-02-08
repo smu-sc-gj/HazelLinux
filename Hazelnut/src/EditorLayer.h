@@ -25,14 +25,11 @@ namespace Hazel {
 		bool OnMouseButtonPressed(MouseButtonPressedEvent& e);
 		
 		void OnOverlayRender();
-<<<<<<< HEAD
-=======
 
 		void NewProject();
 		bool OpenProject();
 		void OpenProject(const std::filesystem::path& path);
 		void SaveProject();
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 
 		void NewScene();
 		void OpenScene();
@@ -49,7 +46,7 @@ namespace Hazel {
 
 		void OnDuplicateEntity();
 
-		void OnDuplicateEntity();
+
 
 		// UI Panels
 		void UI_Toolbar();
@@ -97,11 +94,7 @@ namespace Hazel {
 		Scope<ContentBrowserPanel> m_ContentBrowserPanel;
 
 		// Editor resources
-<<<<<<< HEAD
-		Ref<Texture2D> m_IconPlay, m_IconSimulate, m_IconStop;
-=======
 		Ref<Texture2D> m_IconPlay, m_IconPause, m_IconStep, m_IconSimulate, m_IconStop;
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 	};
 
 }

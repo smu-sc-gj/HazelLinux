@@ -2,10 +2,7 @@
 #include "Hazel/Scene/SceneSerializer.h"
 #include "Hazel/Utils/PlatformUtils.h"
 #include "Hazel/Math/Math.h"
-<<<<<<< HEAD
-=======
 #include "Hazel/Scripting/ScriptEngine.h"
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 
 #include <imgui/imgui.h>
 
@@ -33,13 +30,9 @@ namespace Hazel {
 
 		m_CheckerboardTexture = Texture2D::Create("assets/textures/Checkerboard.png");
 		m_IconPlay = Texture2D::Create("Resources/Icons/PlayButton.png");
-<<<<<<< HEAD
-		m_IconSimulate = Texture2D::Create("Resources/Icons/SimulateButton.png");
-=======
 		m_IconPause = Texture2D::Create("Resources/Icons/PauseButton.png");
 		m_IconSimulate = Texture2D::Create("Resources/Icons/SimulateButton.png");
 		m_IconStep = Texture2D::Create("Resources/Icons/StepButton.png");
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 		m_IconStop = Texture2D::Create("Resources/Icons/StopButton.png");
 
 		FramebufferSpecification fbSpec;
@@ -206,32 +199,18 @@ namespace Hazel {
 		{
 			if (ImGui::BeginMenu("File"))
 			{
-<<<<<<< HEAD
-				// Disabling fullscreen would allow the window to be moved to the front of other windows,
-				// which we can't undo at the moment without finer window depth/z control.
-				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);1
-				if (ImGui::MenuItem("New", "Ctrl+N"))
-=======
 				if (ImGui::MenuItem("Open Project...", "Ctrl+O"))
 					OpenProject();
 
 				ImGui::Separator();
 
 				if (ImGui::MenuItem("New Scene", "Ctrl+N"))
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 					NewScene();
 
 				if (ImGui::MenuItem("Save Scene", "Ctrl+S"))
 					SaveScene();
 
-<<<<<<< HEAD
-				if (ImGui::MenuItem("Save", "Ctrl+S"))
-					SaveScene();
-
-				if (ImGui::MenuItem("Save As...", "Ctrl+Shift+S"))
-=======
 				if (ImGui::MenuItem("Save Scene As...", "Ctrl+Shift+S"))
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 					SaveSceneAs();
 
 				ImGui::Separator();
@@ -303,14 +282,10 @@ namespace Hazel {
 			{
 #ifndef HZ_PLATFORM_LINUX
 				const wchar_t* path = (const wchar_t*)payload->Data;
-<<<<<<< HEAD
 #else
 				const char* path = (char*)payload->Data;
 #endif
-				OpenScene(std::filesystem::path(g_AssetPath) / path);
-=======
 				OpenScene(path);
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 			}
 			ImGui::EndDragDropTarget();
 		}
@@ -394,12 +369,6 @@ namespace Hazel {
 			tintColor.w = 0.5f;
 
 		float size = ImGui::GetWindowHeight() - 4.0f;
-<<<<<<< HEAD
-		{
-			Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate) ? m_IconPlay : m_IconStop;
-			ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) && toolbarEnabled)
-=======
 		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
 
 		bool hasPlayButton = m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play;
@@ -410,7 +379,6 @@ namespace Hazel {
 		{
 			Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate) ? m_IconPlay : m_IconStop;
 			if (ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) && toolbarEnabled)
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 			{
 				if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Simulate)
 					OnScenePlay();
@@ -418,12 +386,6 @@ namespace Hazel {
 					OnSceneStop();
 			}
 		}
-<<<<<<< HEAD
-		ImGui::SameLine();
-		{
-			Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play) ? m_IconSimulate : m_IconStop;		//ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (size * 0.5f));
-			if (ImGui::ImageButton((ImTextureID)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) && toolbarEnabled)
-=======
 
 		if (hasSimulateButton)
 		{
@@ -432,15 +394,12 @@ namespace Hazel {
 
 			Ref<Texture2D> icon = (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play) ? m_IconSimulate : m_IconStop;
 			if (ImGui::ImageButton((ImTextureID)(uint64_t)icon->GetRendererID(), ImVec2(size, size), ImVec2(0, 0), ImVec2(1, 1), 0, ImVec4(0.0f, 0.0f, 0.0f, 0.0f), tintColor) && toolbarEnabled)
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 			{
 				if (m_SceneState == SceneState::Edit || m_SceneState == SceneState::Play)
 					OnSceneSimulate();
 				else if (m_SceneState == SceneState::Simulate)
 					OnSceneStop();
 			}
-<<<<<<< HEAD
-=======
 		}
 		if (hasPauseButton)
 		{
@@ -467,7 +426,6 @@ namespace Hazel {
 					}
 				}
 			}
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 		}
 		ImGui::PopStyleVar(2);
 		ImGui::PopStyleColor(3);
@@ -657,8 +615,6 @@ namespace Hazel {
 		Renderer2D::EndScene();
 	}
 
-<<<<<<< HEAD
-=======
 	void EditorLayer::NewProject()
 	{
 		Project::New();
@@ -692,7 +648,6 @@ namespace Hazel {
 		// Project::SaveActive();
 	}
 
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 	void EditorLayer::NewScene()
 	{
 		m_ActiveScene = CreateRef<Scene>();
@@ -724,10 +679,6 @@ namespace Hazel {
 		if (serializer.Deserialize(path.string()))
 		{
 			m_EditorScene = newScene;
-<<<<<<< HEAD
-			m_EditorScene->OnViewportResize((uint32_t)m_ViewportSize.x, (uint32_t)m_ViewportSize.y);
-=======
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 			m_SceneHierarchyPanel.SetContext(m_EditorScene);
 
 			m_ActiveScene = m_EditorScene;
@@ -801,8 +752,6 @@ namespace Hazel {
 		m_SceneHierarchyPanel.SetContext(m_ActiveScene);
 	}
 
-<<<<<<< HEAD
-=======
 	void EditorLayer::OnScenePause()
 	{
 		if (m_SceneState == SceneState::Edit)
@@ -811,7 +760,6 @@ namespace Hazel {
 		m_ActiveScene->SetPaused(true);
 	}
 
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 	void EditorLayer::OnDuplicateEntity()
 	{
 		if (m_SceneState != SceneState::Edit)
@@ -819,14 +767,10 @@ namespace Hazel {
 
 		Entity selectedEntity = m_SceneHierarchyPanel.GetSelectedEntity();
 		if (selectedEntity)
-<<<<<<< HEAD
-			m_EditorScene->DuplicateEntity(selectedEntity);
-=======
 		{
 			Entity newEntity = m_EditorScene->DuplicateEntity(selectedEntity);
 			m_SceneHierarchyPanel.SetSelectedEntity(newEntity);
 		}
->>>>>>> e4b0493999206bd2c3ff9d30fa333bcf81f313c8
 	}
 
 }
