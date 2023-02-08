@@ -33,6 +33,7 @@ project "Hazel"
 	{
 		"src",
 		"vendor/spdlog/include",
+		"%{IncludeDir.Box2D}",
 		"%{IncludeDir.GLFW}",
 		"%{IncludeDir.Glad}",
 		"%{IncludeDir.ImGui}",
@@ -46,21 +47,52 @@ project "Hazel"
 
 	links
 	{
+		"Box2D",
 		"GLFW",
 		"Glad",
 		"ImGui",
 		"yaml-cpp",
-		"opengl32.lib"
 	}
 
 	filter "files:vendor/ImGuizmo/**.cpp"
 	flags { "NoPCH" }
 
+	filter "system:linux"
+		removefiles { "src/Platform/Windows/WindowsPlatformUtils.cpp" }
+	
+		defines
+		{
+			"HZ_PLATFORM_LINUX",
+		}
+
 	filter "system:windows"
 		systemversion "latest"
 
+		removefiles { "**/Linux/**" }
+
+		links 
+		{ 
+			"opengl32.lib"
+		}
+
 		defines
 		{
+			"HZ_PLATFORM_WINDOWS",
+		}
+
+	filter {"system:windows", "configurations:Debug"}
+		links
+		{
+			"%{Library.ShaderC_Debug}",
+			"%{Library.SPIRV_Cross_Debug}",
+			"%{Library.SPIRV_Cross_GLSL_Debug}"
+		}
+	filter {"system:windows", "configurations:Release or Dist"}
+		links
+		{
+			"%{Library.ShaderC_Release}",
+			"%{Library.SPIRV_Cross_Release}",
+			"%{Library.SPIRV_Cross_GLSL_Release}"
 		}
 
 	filter "configurations:Debug"
