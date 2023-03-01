@@ -19,7 +19,7 @@ endif
 # #############################################
 
 RESCOMP = windres
-INCLUDES += -I../Hazel/vendor/spdlog/include -I../Hazel/src -I../Hazel/vendor -I../Hazel/vendor/glm -I../Hazel/vendor/entt/include -I../Hazel/vendor/ImGuizmo
+INCLUDES += -I../Hazel/vendor/spdlog/include -I../Hazel/src -I../Hazel/vendor -I../Hazel/vendor/entt/include -I../Hazel/vendor/filewatch -I../Hazel/vendor/glm -I../Hazel/vendor/ImGuizmo
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)

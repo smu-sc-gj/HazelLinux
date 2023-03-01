@@ -16,8 +16,9 @@ ifeq ($(config),debug)
   ImGui_config = debug
   yaml_cpp_config = debug
   Hazel_config = debug
-  Sandbox_config = debug
+  Hazel_ScriptCore_config = debug
   Hazelnut_config = debug
+  Sandbox_config = debug
 
 else ifeq ($(config),release)
   Premake_config = release
@@ -27,8 +28,9 @@ else ifeq ($(config),release)
   ImGui_config = release
   yaml_cpp_config = release
   Hazel_config = release
-  Sandbox_config = release
+  Hazel_ScriptCore_config = release
   Hazelnut_config = release
+  Sandbox_config = release
 
 else ifeq ($(config),dist)
   Premake_config = dist
@@ -38,20 +40,27 @@ else ifeq ($(config),dist)
   ImGui_config = dist
   yaml_cpp_config = dist
   Hazel_config = dist
-  Sandbox_config = dist
+  Hazel_ScriptCore_config = dist
   Hazelnut_config = dist
+  Sandbox_config = dist
 
 else
   $(error "invalid configuration $(config)")
 endif
 
-PROJECTS := Premake Box2D GLFW Glad ImGui yaml-cpp Hazel Sandbox Hazelnut
+PROJECTS := Premake Box2D GLFW Glad ImGui yaml-cpp Hazel Hazel-ScriptCore Hazelnut Sandbox
 
-.PHONY: all clean help $(PROJECTS) Dependencies
+.PHONY: all clean help $(PROJECTS) Core Dependencies Misc Tools
 
 all: $(PROJECTS)
 
+Core: Hazel Hazel-ScriptCore
+
 Dependencies: Box2D GLFW Glad ImGui Premake yaml-cpp
+
+Misc: Sandbox
+
+Tools: Hazelnut
 
 Premake:
 ifneq (,$(Premake_config))
@@ -95,16 +104,22 @@ ifneq (,$(Hazel_config))
 	@${MAKE} --no-print-directory -C Hazel -f Makefile config=$(Hazel_config)
 endif
 
-Sandbox: Hazel GLFW Glad ImGui
-ifneq (,$(Sandbox_config))
-	@echo "==== Building Sandbox ($(Sandbox_config)) ===="
-	@${MAKE} --no-print-directory -C Sandbox -f Makefile config=$(Sandbox_config)
+Hazel-ScriptCore:
+ifneq (,$(Hazel_ScriptCore_config))
+	@echo "==== Building Hazel-ScriptCore ($(Hazel_ScriptCore_config)) ===="
+	@${MAKE} --no-print-directory -C Hazel-ScriptCore -f Makefile config=$(Hazel_ScriptCore_config)
 endif
 
 Hazelnut: Hazel GLFW Glad ImGui yaml-cpp Box2D
 ifneq (,$(Hazelnut_config))
 	@echo "==== Building Hazelnut ($(Hazelnut_config)) ===="
 	@${MAKE} --no-print-directory -C Hazelnut -f Makefile config=$(Hazelnut_config)
+endif
+
+Sandbox: Hazel GLFW Glad ImGui
+ifneq (,$(Sandbox_config))
+	@echo "==== Building Sandbox ($(Sandbox_config)) ===="
+	@${MAKE} --no-print-directory -C Sandbox -f Makefile config=$(Sandbox_config)
 endif
 
 clean:
@@ -115,8 +130,9 @@ clean:
 	@${MAKE} --no-print-directory -C Hazel/vendor/imgui -f Makefile clean
 	@${MAKE} --no-print-directory -C Hazel/vendor/yaml-cpp -f Makefile clean
 	@${MAKE} --no-print-directory -C Hazel -f Makefile clean
-	@${MAKE} --no-print-directory -C Sandbox -f Makefile clean
+	@${MAKE} --no-print-directory -C Hazel-ScriptCore -f Makefile clean
 	@${MAKE} --no-print-directory -C Hazelnut -f Makefile clean
+	@${MAKE} --no-print-directory -C Sandbox -f Makefile clean
 
 help:
 	@echo "Usage: make [config=name] [target]"
@@ -136,7 +152,8 @@ help:
 	@echo "   ImGui"
 	@echo "   yaml-cpp"
 	@echo "   Hazel"
-	@echo "   Sandbox"
+	@echo "   Hazel-ScriptCore"
 	@echo "   Hazelnut"
+	@echo "   Sandbox"
 	@echo ""
 	@echo "For more information, see https://github.com/premake/premake-core/wiki"

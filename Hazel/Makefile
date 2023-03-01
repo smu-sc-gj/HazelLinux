@@ -22,7 +22,7 @@ RESCOMP = windres
 PCH = src/hzpch.h
 PCH_PLACEHOLDER = $(OBJDIR)/$(notdir $(PCH))
 GCH = $(PCH_PLACEHOLDER).gch
-INCLUDES += -Isrc -Ivendor/spdlog/include -Ivendor/Box2D/include -Ivendor/GLFW/include -Ivendor/Glad/include -Ivendor/imgui -Ivendor/glm -Ivendor/stb_image -Ivendor/entt/include -Ivendor/yaml-cpp/include -Ivendor/ImGuizmo -IInclude
+INCLUDES += -Isrc -Ivendor/spdlog/include -Ivendor/Box2D/include -Ivendor/filewatch -Ivendor/GLFW/include -Ivendor/Glad/include -Ivendor/imgui -Ivendor/glm -Ivendor/stb_image -Ivendor/entt/include -Ivendor/mono/include -Ivendor/yaml-cpp/include -Ivendor/ImGuizmo -IInclude
 FORCE_INCLUDE +=
 ALL_CPPFLAGS += $(CPPFLAGS) -MD -MP $(DEFINES) $(INCLUDES)
 ALL_RESFLAGS += $(RESFLAGS) $(DEFINES) $(INCLUDES)
@@ -41,9 +41,9 @@ OBJDIR = ../bin-int/Debug-linux-x86_64/Hazel
 DEFINES += -D_CRT_SECURE_NO_WARNINGS -DGLFW_INCLUDE_NONE -DHZ_PLATFORM_LINUX -DHZ_DEBUG
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -g
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -g -std=c++17
-LIBS += vendor/Box2D/bin/Debug-linux-x86_64/Box2D/libBox2D.a vendor/GLFW/bin/Debug-linux-x86_64/GLFW/libGLFW.a vendor/Glad/bin/Debug-linux-x86_64/Glad/libGlad.a vendor/imgui/bin/Debug-linux-x86_64/ImGui/libImGui.a vendor/yaml-cpp/bin/Debug-linux-x86_64/yaml-cpp/libyaml-cpp.a -lshaderc_sharedd.lib -lspirv-cross-cored.lib -lspirv-cross-glsld.lib
+LIBS += vendor/Box2D/bin/Debug-linux-x86_64/Box2D/libBox2D.a vendor/GLFW/bin/Debug-linux-x86_64/GLFW/libGLFW.a vendor/Glad/bin/Debug-linux-x86_64/Glad/libGlad.a vendor/imgui/bin/Debug-linux-x86_64/ImGui/libImGui.a vendor/yaml-cpp/bin/Debug-linux-x86_64/yaml-cpp/libyaml-cpp.a -lopengl32.lib -llibmono-static-sgen.lib -lshaderc_sharedd.lib -lspirv-cross-cored.lib -lspirv-cross-glsld.lib
 LDDEPS += vendor/Box2D/bin/Debug-linux-x86_64/Box2D/libBox2D.a vendor/GLFW/bin/Debug-linux-x86_64/GLFW/libGLFW.a vendor/Glad/bin/Debug-linux-x86_64/Glad/libGlad.a vendor/imgui/bin/Debug-linux-x86_64/ImGui/libImGui.a vendor/yaml-cpp/bin/Debug-linux-x86_64/yaml-cpp/libyaml-cpp.a
-ALL_LDFLAGS += $(LDFLAGS) -L/Lib -L/usr/lib64 -m64
+ALL_LDFLAGS += $(LDFLAGS) -Lvendor/mono/lib/Debug -L/Lib -L/usr/lib64 -m64
 
 else ifeq ($(config),release)
 TARGETDIR = ../bin/Release-linux-x86_64/Hazel
@@ -52,9 +52,9 @@ OBJDIR = ../bin-int/Release-linux-x86_64/Hazel
 DEFINES += -D_CRT_SECURE_NO_WARNINGS -DGLFW_INCLUDE_NONE -DHZ_PLATFORM_LINUX -DHZ_RELEASE
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c++17
-LIBS += vendor/Box2D/bin/Release-linux-x86_64/Box2D/libBox2D.a vendor/GLFW/bin/Release-linux-x86_64/GLFW/libGLFW.a vendor/Glad/bin/Release-linux-x86_64/Glad/libGlad.a vendor/imgui/bin/Release-linux-x86_64/ImGui/libImGui.a vendor/yaml-cpp/bin/Release-linux-x86_64/yaml-cpp/libyaml-cpp.a -lshaderc_shared.lib -lspirv-cross-core.lib -lspirv-cross-glsl.lib
+LIBS += vendor/Box2D/bin/Release-linux-x86_64/Box2D/libBox2D.a vendor/GLFW/bin/Release-linux-x86_64/GLFW/libGLFW.a vendor/Glad/bin/Release-linux-x86_64/Glad/libGlad.a vendor/imgui/bin/Release-linux-x86_64/ImGui/libImGui.a vendor/yaml-cpp/bin/Release-linux-x86_64/yaml-cpp/libyaml-cpp.a -lopengl32.lib -llibmono-static-sgen.lib -lshaderc_shared.lib -lspirv-cross-core.lib -lspirv-cross-glsl.lib
 LDDEPS += vendor/Box2D/bin/Release-linux-x86_64/Box2D/libBox2D.a vendor/GLFW/bin/Release-linux-x86_64/GLFW/libGLFW.a vendor/Glad/bin/Release-linux-x86_64/Glad/libGlad.a vendor/imgui/bin/Release-linux-x86_64/ImGui/libImGui.a vendor/yaml-cpp/bin/Release-linux-x86_64/yaml-cpp/libyaml-cpp.a
-ALL_LDFLAGS += $(LDFLAGS) -L/Lib -L/usr/lib64 -m64 -s
+ALL_LDFLAGS += $(LDFLAGS) -Lvendor/mono/lib/Release -L/Lib -L/usr/lib64 -m64 -s
 
 else ifeq ($(config),dist)
 TARGETDIR = ../bin/Dist-linux-x86_64/Hazel
@@ -63,9 +63,9 @@ OBJDIR = ../bin-int/Dist-linux-x86_64/Hazel
 DEFINES += -D_CRT_SECURE_NO_WARNINGS -DGLFW_INCLUDE_NONE -DHZ_PLATFORM_LINUX -DHZ_DIST
 ALL_CFLAGS += $(CFLAGS) $(ALL_CPPFLAGS) -m64 -O2
 ALL_CXXFLAGS += $(CXXFLAGS) $(ALL_CPPFLAGS) -m64 -O2 -std=c++17
-LIBS += vendor/Box2D/bin/Dist-linux-x86_64/Box2D/libBox2D.a vendor/GLFW/bin/Dist-linux-x86_64/GLFW/libGLFW.a vendor/Glad/bin/Dist-linux-x86_64/Glad/libGlad.a vendor/imgui/bin/Dist-linux-x86_64/ImGui/libImGui.a vendor/yaml-cpp/bin/Dist-linux-x86_64/yaml-cpp/libyaml-cpp.a -lshaderc_shared.lib -lspirv-cross-core.lib -lspirv-cross-glsl.lib
+LIBS += vendor/Box2D/bin/Dist-linux-x86_64/Box2D/libBox2D.a vendor/GLFW/bin/Dist-linux-x86_64/GLFW/libGLFW.a vendor/Glad/bin/Dist-linux-x86_64/Glad/libGlad.a vendor/imgui/bin/Dist-linux-x86_64/ImGui/libImGui.a vendor/yaml-cpp/bin/Dist-linux-x86_64/yaml-cpp/libyaml-cpp.a -lopengl32.lib -llibmono-static-sgen.lib -lshaderc_shared.lib -lspirv-cross-core.lib -lspirv-cross-glsl.lib
 LDDEPS += vendor/Box2D/bin/Dist-linux-x86_64/Box2D/libBox2D.a vendor/GLFW/bin/Dist-linux-x86_64/GLFW/libGLFW.a vendor/Glad/bin/Dist-linux-x86_64/Glad/libGlad.a vendor/imgui/bin/Dist-linux-x86_64/ImGui/libImGui.a vendor/yaml-cpp/bin/Dist-linux-x86_64/yaml-cpp/libyaml-cpp.a
-ALL_LDFLAGS += $(LDFLAGS) -L/Lib -L/usr/lib64 -m64 -s
+ALL_LDFLAGS += $(LDFLAGS) -Lvendor/mono/lib/Dist -L/Lib -L/usr/lib64 -m64 -s
 
 endif
 
@@ -83,6 +83,7 @@ GENERATED += $(OBJDIR)/Application.o
 GENERATED += $(OBJDIR)/Buffer.o
 GENERATED += $(OBJDIR)/EditorCamera.o
 GENERATED += $(OBJDIR)/Entity.o
+GENERATED += $(OBJDIR)/FileSystem.o
 GENERATED += $(OBJDIR)/Framebuffer.o
 GENERATED += $(OBJDIR)/GraphicsContext.o
 GENERATED += $(OBJDIR)/ImGuiBuild.o
@@ -103,6 +104,8 @@ GENERATED += $(OBJDIR)/OpenGLUniformBuffer.o
 GENERATED += $(OBJDIR)/OpenGLVertexArray.o
 GENERATED += $(OBJDIR)/OrthographicCamera.o
 GENERATED += $(OBJDIR)/OrthographicCameraController.o
+GENERATED += $(OBJDIR)/Project.o
+GENERATED += $(OBJDIR)/ProjectSerializer.o
 GENERATED += $(OBJDIR)/RenderCommand.o
 GENERATED += $(OBJDIR)/Renderer.o
 GENERATED += $(OBJDIR)/Renderer2D.o
@@ -110,6 +113,8 @@ GENERATED += $(OBJDIR)/RendererAPI.o
 GENERATED += $(OBJDIR)/Scene.o
 GENERATED += $(OBJDIR)/SceneCamera.o
 GENERATED += $(OBJDIR)/SceneSerializer.o
+GENERATED += $(OBJDIR)/ScriptEngine.o
+GENERATED += $(OBJDIR)/ScriptGlue.o
 GENERATED += $(OBJDIR)/Shader.o
 GENERATED += $(OBJDIR)/Texture.o
 GENERATED += $(OBJDIR)/UUID.o
@@ -124,6 +129,7 @@ OBJECTS += $(OBJDIR)/Application.o
 OBJECTS += $(OBJDIR)/Buffer.o
 OBJECTS += $(OBJDIR)/EditorCamera.o
 OBJECTS += $(OBJDIR)/Entity.o
+OBJECTS += $(OBJDIR)/FileSystem.o
 OBJECTS += $(OBJDIR)/Framebuffer.o
 OBJECTS += $(OBJDIR)/GraphicsContext.o
 OBJECTS += $(OBJDIR)/ImGuiBuild.o
@@ -144,6 +150,8 @@ OBJECTS += $(OBJDIR)/OpenGLUniformBuffer.o
 OBJECTS += $(OBJDIR)/OpenGLVertexArray.o
 OBJECTS += $(OBJDIR)/OrthographicCamera.o
 OBJECTS += $(OBJDIR)/OrthographicCameraController.o
+OBJECTS += $(OBJDIR)/Project.o
+OBJECTS += $(OBJDIR)/ProjectSerializer.o
 OBJECTS += $(OBJDIR)/RenderCommand.o
 OBJECTS += $(OBJDIR)/Renderer.o
 OBJECTS += $(OBJDIR)/Renderer2D.o
@@ -151,6 +159,8 @@ OBJECTS += $(OBJDIR)/RendererAPI.o
 OBJECTS += $(OBJDIR)/Scene.o
 OBJECTS += $(OBJDIR)/SceneCamera.o
 OBJECTS += $(OBJDIR)/SceneSerializer.o
+OBJECTS += $(OBJDIR)/ScriptEngine.o
+OBJECTS += $(OBJDIR)/ScriptGlue.o
 OBJECTS += $(OBJDIR)/Shader.o
 OBJECTS += $(OBJDIR)/Texture.o
 OBJECTS += $(OBJDIR)/UUID.o
@@ -227,6 +237,9 @@ endif
 $(OBJDIR)/Application.o: src/Hazel/Core/Application.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/FileSystem.o: src/Hazel/Core/FileSystem.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Layer.o: src/Hazel/Core/Layer.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
@@ -249,6 +262,12 @@ $(OBJDIR)/ImGuiLayer.o: src/Hazel/ImGui/ImGuiLayer.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Math.o: src/Hazel/Math/Math.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/Project.o: src/Hazel/Project/Project.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/ProjectSerializer.o: src/Hazel/Project/ProjectSerializer.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/Buffer.o: src/Hazel/Renderer/Buffer.cpp
@@ -303,6 +322,12 @@ $(OBJDIR)/SceneCamera.o: src/Hazel/Scene/SceneCamera.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/SceneSerializer.o: src/Hazel/Scene/SceneSerializer.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/ScriptEngine.o: src/Hazel/Scripting/ScriptEngine.cpp
+	@echo "$(notdir $<)"
+	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
+$(OBJDIR)/ScriptGlue.o: src/Hazel/Scripting/ScriptGlue.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) -include $(PCH_PLACEHOLDER) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 $(OBJDIR)/LinuxPlatformUtils.o: src/Platform/Linux/LinuxPlatformUtils.cpp

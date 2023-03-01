@@ -16,6 +16,7 @@
 
 #include "box2d/b2_body.h"
 
+
 namespace Hazel {
 
 	static std::unordered_map<MonoType*, std::function<bool(Entity)>> s_EntityHasComponentFuncs;
